@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
@@ -17,6 +18,6 @@ public class Incidence {
     private LocalDateTime time;
     private LocalDate date;
     @Embedded
-    private UserAddress address;
+    private Address address;
     private String description;
 }

@@ -1,7 +1,10 @@
 package org.fir.firsystem.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -18,7 +21,11 @@ public class AppUser {
     private String password;
     private String email;
     @Embedded
-    private UserAddress address;
+    private Address address;
+
+    @OneToMany
+    @JsonManagedReference
+    List<Complaint> listComplaints;
 
 
 }
