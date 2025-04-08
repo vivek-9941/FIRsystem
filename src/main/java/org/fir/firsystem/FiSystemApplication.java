@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FiRsystemApplication {
+public class FiSystemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FiRsystemApplication.class, args);
+		SpringApplication.run(FiSystemApplication.class, args);
 	}
 
 }
