@@ -1,9 +1,6 @@
 package org.fir.firsystem.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -20,6 +17,7 @@ public class AppUser {
     private String username;
     private String password;
     private String email;
+    @Embedded
     private UserAddress address;
 
 

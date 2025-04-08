@@ -15,7 +15,6 @@ public class UserAddress {
     private String state;
     private String zip;
     private String country;
-
     public UserAddress() {
 
     }
