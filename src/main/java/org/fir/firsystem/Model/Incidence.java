@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Data
 public class Incidence {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
