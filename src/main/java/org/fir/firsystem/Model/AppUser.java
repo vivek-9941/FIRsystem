@@ -23,9 +23,9 @@ public class AppUser {
     @Embedded
     private Address address;
 
-    @OneToMany
-    @JsonManagedReference
-    List<Complaint> listComplaints;
+//    @OneToMany
+//    @JsonManagedReference
+//    List<Complaint> listComplaints;
 
 
 }
