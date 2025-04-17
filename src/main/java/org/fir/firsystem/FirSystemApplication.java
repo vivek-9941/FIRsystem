@@ -1,5 +1,7 @@
 package org.fir.firsystem;
 
+import org.fir.firsystem.Model.Complaint;
+import org.fir.firsystem.Model.Incidence;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
