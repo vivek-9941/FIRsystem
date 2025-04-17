@@ -19,6 +19,7 @@ public class AppUser {
     private String lastName;
     private String username;
     private String password;
+    private String aadharNumber;
     private String email;
     @Embedded
     private Address address;

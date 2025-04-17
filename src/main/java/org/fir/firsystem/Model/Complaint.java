@@ -1,14 +1,9 @@
 package org.fir.firsystem.Model;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.Nullable;
 
-import java.util.List;
 @Entity
 @Data
 @RequiredArgsConstructor
@@ -18,9 +13,13 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = true)
-    @ElementCollection
-    private List<String> Accused_details;
+    @ManyToOne
+    @JoinColumn(name = "accused_id")
+    private Person accused;
+
+    @ManyToOne
+    @JoinColumn(name = "victim_id")
+    private Person victim ;
 
     private String evidenceLink;
 
@@ -28,6 +27,10 @@ public class Complaint {
     private ComplaintStatus status;
 
     @ManyToOne
+    @JoinColumn(name = "incidence_id")
+    private Incidence incidence;
+
+    @OneToOne
     @JsonBackReference
     @JoinColumn(name = "user_id") // foreign key in Complaint table
     private AppUser user;
