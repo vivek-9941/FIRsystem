@@ -22,7 +22,7 @@ public class trail {
         @Autowired
         private IncidenceRepository incidenceRepository;
 
-        @Autowired
+         @Autowired
         private PersonRepository personRepository;
 
         @PostMapping("/")
