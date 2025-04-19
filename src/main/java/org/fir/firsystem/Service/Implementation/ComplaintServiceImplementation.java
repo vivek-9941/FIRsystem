@@ -21,6 +21,9 @@ public class ComplaintServiceImplementation implements ComplaintService {
     private GroqController groqController;
 
     @Autowired
+    private EmailController emailController;
+
+    @Autowired
     private AppUserService appUserService;
 
     @Autowired
