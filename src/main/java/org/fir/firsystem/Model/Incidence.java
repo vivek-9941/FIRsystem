@@ -24,4 +24,6 @@ public class Incidence {
     @Embedded
     private Address address;
     private String description;
+    private String crimetype;
 }
+
