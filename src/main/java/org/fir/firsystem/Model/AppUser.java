@@ -31,6 +31,10 @@ public class AppUser {
     @Embedded
     private Address address;
 
+    @Enumerated(EnumType.STRING)
+    Role UserRole;
+
+
 //    @OneToMany
 //    @JsonManagedReference
 //    List<Complaint> listComplaints;
