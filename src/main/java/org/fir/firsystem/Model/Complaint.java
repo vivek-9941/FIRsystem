@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Cacheable
+
 public class Complaint {
 
     @Id
