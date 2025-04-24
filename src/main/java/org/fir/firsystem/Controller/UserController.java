@@ -17,25 +17,31 @@ public class UserController {
     private EmailController emailController;
 
 
-//    @PostMapping("/login")
+    //    @PostMapping("/login")
 //    public ResponseEntity<?> login(@RequestBody AppUser user) {
 //
 //    }
-@Autowired
-private OtpService otpService;
+    @Autowired
+    private OtpService otpService;
 
     @PostMapping("/sendOtp")
     public ResponseEntity<?> sendOtp(@RequestParam String email) {
         String otp = String.valueOf((int) (Math.random() * 900000) + 100000);
 
-        otpService.saveOtp(email, otp); // Save to Redis with TTL
 
         String subject = "Your OTP for e-FIR";
         String body = "Dear user,\n\nYour OTP is: " + otp +
                 "\n\nValid for 2 minutes. Do not share it.\n\n- e-FIR Team";
 
-        emailController.sendEmail(email, subject, body);
-        return ResponseEntity.ok().body("OTP sent successfully");
+
+        boolean verdict = emailController.sendEmail(email, subject, body);
+        if (verdict) {
+            otpService.saveOtp(email, otp); // Save to Redis with TTL
+
+            return ResponseEntity.ok().body("OTP sent successfully");
+        } else {
+            return ResponseEntity.ok().body("OTP not sent");
+        }
     }
 
 

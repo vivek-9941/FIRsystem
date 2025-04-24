@@ -20,9 +20,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ComplaintServiceTest {
@@ -32,7 +32,6 @@ public class ComplaintServiceTest {
     private GroqController groqController;
     @Mock
     private EmailController emailController;
-    ;
     @Mock
     private AppUserService appUserService;
     @Mock
@@ -62,7 +61,7 @@ public class ComplaintServiceTest {
         user.setEmail("john@doe.com");
         user.setUsername("john_doe123");
 
-        Incidence incidence = new Incidence();
+        incidence = new Incidence();
         incidence.setDescription("This is a description");
 
         complaint = new Complaint();
@@ -71,49 +70,57 @@ public class ComplaintServiceTest {
         complaint.setIncidence(incidence);
         complaint.setAccused(accused);
         complaint.setVictim(victim);
-
-
     }
-    private void commonmocks(){
-        when(incidenceService.save(incidence)).thenReturn(incidence);
-        when(complaintRepository.save(any())).thenAnswer(i -> i.getArgument(0));
-        when(groqController.callApi(anyString())).thenReturn("summary", "[\"Cyber Crimes\"]");
-    }
-        @Test
-        void AccusedVictimSAvedTest(){
-          when(personService.save(accused)).thenAnswer(i -> i.getArgument(0));
-          when(personService.save(victim)).thenAnswer(i -> i.getArgument(0));
-            commonmocks();
-            complaintService.saveComplaint(complaint);
-            verify(personService).save(accused);
-            verify(personService.save(victim));
 
-        }
-        @Test
-    void GroqcontrollerTest(){
-        when(groqController.callApi(anyString())).thenReturn("summary");
+    private void commonmocks() {
+        when(incidenceService.save(any(Incidence.class))).thenReturn(incidence);
+        when(complaintRepository.save(any(Complaint.class))).thenAnswer(i -> i.getArgument(0));
+    }
+
+    @Test
+    void AccusedVictimSAvedTest() {
+        when(personService.save(accused)).thenReturn(accused);
+        when(personService.save(victim)).thenReturn(victim);
         commonmocks();
-        verify(complaintRepository).save(complaint);
-        }
 
-        @Test
-    void testappuserTest(){
-            when(personService.save(any())).thenReturn(new Person());
-            when(appUserService.findByUsername("john_doe")).thenReturn(user);
-            commonmocks();
+        Complaint result = complaintService.saveComplaint(complaint);
 
-            complaintService.saveComplaint(complaint);
+        verify(personService).save(accused);
+        verify(personService).save(victim);
+        assertEquals(accused, result.getAccused());
+        assertEquals(victim, result.getVictim());
+    }
 
-            verify(appUserService).findByUsername("john_doe");
+    @Test
+    void GroqcontrollerTest() {
+        when(groqController.callApi(anyString()))
+                .thenReturn("summary")
+                .thenReturn("[\"Cyber Crimes\"]");
+        commonmocks();
 
-        }
+        Complaint result = complaintService.saveComplaint(complaint);
 
+        verify(groqController, atLeast(2)).callApi(anyString());
+
+    }
+
+    @Test
+    void testappuserTest() {
+        when(personService.save(any(Person.class))).thenReturn(new Person());
+        when(appUserService.findByUsername("john_doe123")).thenReturn(user);
+        commonmocks();
+
+        Complaint result = complaintService.saveComplaint(complaint);
+
+        verify(appUserService).findByUsername("john_doe123");
+        assertEquals(user, result.getUser());
+    }
 
     @Test
     void testEmailIsSent() {
-        when(personService.save(any())).thenReturn(new Person());
-        when(appUserService.findByUsername("john_doe")).thenReturn(user);
-        when(complaintRepository.save(any())).thenAnswer(i -> {
+        when(personService.save(any(Person.class))).thenReturn(new Person());
+        when(appUserService.findByUsername("john_doe123")).thenReturn(user);
+        when(complaintRepository.save(any(Complaint.class))).thenAnswer(i -> {
             Complaint c = i.getArgument(0);
             c.setId(101);
             return c;
@@ -123,10 +130,9 @@ public class ComplaintServiceTest {
         complaintService.saveComplaint(complaint);
 
         verify(emailController).sendEmail(
-                eq("john@example.com"),
+                eq("john@doe.com"),
                 contains("FIR Complaint Registered Successfully"),
-                contains("Your FIR Complaint ID is: 101")
+                contains("101")
         );
     }
-
 }

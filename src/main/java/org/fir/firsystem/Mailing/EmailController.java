@@ -9,14 +9,14 @@ public class EmailController {
 
     @Autowired
     private EmailSenderService emailSenderService;
-    public String sendEmail(String toEmail,
+    public boolean sendEmail(String toEmail,
                             String subject,
                             String body) {
         try {
             emailSenderService.sendEmail(toEmail, body, subject);
-            return "Email sent successfully to " + toEmail;
+            return true;
         } catch (Exception e) {
-            return "Error sending email: " + e.getMessage();
+            return false;
         }
     }
 }
