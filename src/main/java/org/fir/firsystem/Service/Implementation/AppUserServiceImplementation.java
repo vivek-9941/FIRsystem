@@ -39,8 +39,6 @@ public class AppUserServiceImplementation implements AppUserService {
         return appUserRepository.findByUsername(username);
     }
 
-
-
     public Complaint findcomplaintByUser(String username) {
         AppUser user = appUserRepository.findByUsername(username);
         return complaintRepository.findByUser(user);
@@ -53,8 +51,6 @@ public class AppUserServiceImplementation implements AppUserService {
 
     @Override
     public String validateUser(AppUser u) {
-
-
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         u.getUsername(), u.getPassword()
@@ -63,10 +59,8 @@ public class AppUserServiceImplementation implements AppUserService {
         if (authenticate.isAuthenticated()) {
             //after login send the token
             return jwtService.generateToken(u.getUsername(), "USER");
-
         }
         return null;
-
     }
 
 
