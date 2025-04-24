@@ -27,7 +27,6 @@ public class ComplaintServiceImplementation implements ComplaintService {
     private AppUserService appUserService;
 
 
-
     @Autowired
     private ComplaintRepository complaintRepository;
 
@@ -43,8 +42,8 @@ public class ComplaintServiceImplementation implements ComplaintService {
         Person savedAccused = personService.save(complaint.getAccused());
         Person savedVictim = personService.save(complaint.getVictim());
         //description
-        String incidence =complaint.getIncidence().getDescription();
-        String summary = groqController.callApi("Convert the given incident into a concise, grammatically correct, and legally appropriate description in formal language, suitable for the 'Incident Description' section of an FIR complaint. Respond with only the final description and nothing else."+" "+ incidence );
+        String incidence = complaint.getIncidence().getDescription();
+        String summary = groqController.callApi("Convert the given incident into a concise, grammatically correct, and legally appropriate description in formal language, suitable for the 'Incident Description' section of an FIR complaint. Respond with only the final description and nothing else." + " " + incidence);
         Incidence incidence1 = complaint.getIncidence();
         incidence1.setDescription(summary);
         //crime category;
@@ -91,7 +90,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
                 "1. Identify which categories best fit the provided summary.\n" +
                 "2. only Return the identified categories as an array and nothing.\n" +
                 "3. If no categories match, return [\"Not Identified\"].";
-        String crimes= groqController.callApi(prompt);
+        String crimes = groqController.callApi(prompt);
         incidence1.setCrimetype(crimes);
         System.out.println(incidence1);
         Incidence saved_incidence = incidenceService.save(incidence1);
