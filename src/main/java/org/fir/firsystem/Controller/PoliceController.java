@@ -14,6 +14,7 @@ public class PoliceController {
     @Autowired
     private ComplaintService complaintService;
 
+    @PutMapping("/complaint")
     public ResponseEntity<?> updateStatusOfComplaint(@RequestBody Complaint complaint) {
         return ResponseEntity.status(HttpStatus.OK).body(complaintService.updateComplaint(complaint));
     }
@@ -24,6 +25,4 @@ public class PoliceController {
             @RequestParam(defaultValue = "10") Integer size) {
         return ResponseEntity.ok(complaintService.getAllComplaints(pageNumber, size));
     }
-
-
 }
