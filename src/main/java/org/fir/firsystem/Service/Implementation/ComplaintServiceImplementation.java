@@ -14,6 +14,11 @@ import org.fir.firsystem.Service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+
+
 import java.util.List;
 
 @Service
@@ -143,6 +148,8 @@ public class ComplaintServiceImplementation implements ComplaintService {
 
     @Override
     public List<Complaint> getAllComplaints(Integer page, Integer size) {
-        return complaintRepository.findAll();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Complaint> complaintPage = complaintRepository.findAll(pageable);
+        return complaintPage.getContent();
     }
 }
