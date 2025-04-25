@@ -1,5 +1,6 @@
 package org.fir.firsystem.Service.Security;
 
+import org.fir.firsystem.Repository.AppUserRepository;
 import org.fir.firsystem.Service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +10,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
+//    @Autowired
+//    private AppUserService service;
+
     @Autowired
-    private AppUserService service;
+    private AppUserRepository repository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails =  service.findByUsername(username);
+        UserDetails userDetails =  repository.findByUsername(username);
         if(userDetails==null) {
             System.out.println("user not found");
             throw new UsernameNotFoundException("user not found");
