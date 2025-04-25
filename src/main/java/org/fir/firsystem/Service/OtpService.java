@@ -18,7 +18,7 @@ public class OtpService {
     public void saveOtp(String email, String otp) {
         String key = OTP_PREFIX + email;
         redisTemplate.opsForValue().set(key, otp);
-        redisTemplate.expire(key, Duration.ofMinutes(2)); // Auto-expire in 2 mins
+        redisTemplate.expire(key, Duration.ofMinutes(5)); // Auto-expire in 5 mins
     }
 
     public boolean verifyOtp(String email, String otp) {
