@@ -14,6 +14,8 @@ import org.fir.firsystem.Service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ComplaintServiceImplementation implements ComplaintService {
 
@@ -26,15 +28,14 @@ public class ComplaintServiceImplementation implements ComplaintService {
     @Autowired
     private AppUserService appUserService;
 
-
     @Autowired
-    private ComplaintRepository complaintRepository;
-
-    @Autowired
-    IncidenceService incidenceService;
+    private IncidenceService incidenceService;
 
     @Autowired
     private PersonService personService;
+
+    @Autowired
+    private ComplaintRepository complaintRepository;
 
     @Override
     public Complaint saveComplaint(Complaint complaint) {
@@ -127,5 +128,21 @@ public class ComplaintServiceImplementation implements ComplaintService {
         return complaint_from_DB;
     }
 
+    @Override
+    public Complaint updateComplaint(Complaint complaint) {
+        Complaint toSaved = new Complaint();
+        toSaved.setId(complaint.getId());
+        toSaved.setStatus(complaint.getStatus());
+        toSaved.setEvidenceLink(complaint.getEvidenceLink());
+        toSaved.setIncidence(incidenceService.save(complaint.getIncidence()));
+        toSaved.setAccused(personService.save(complaint.getAccused()));
+        toSaved.setVictim(personService.save(complaint.getVictim()));
+        toSaved.setUser(appUserService.save(complaint.getUser()));
+        return complaintRepository.save(toSaved);
+    }
 
+    @Override
+    public List<Complaint> getAllComplaints(Integer page, Integer size) {
+        return complaintRepository.findAll();
+    }
 }
