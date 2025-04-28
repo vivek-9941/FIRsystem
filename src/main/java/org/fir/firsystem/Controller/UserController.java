@@ -19,10 +19,6 @@ public class UserController {
     @Autowired
     private AppUserService appUserService;
 
-    //    @PostMapping("/login")
-//    public ResponseEntity<?> login(@RequestBody AppUser user) {
-//
-//    }
     @Autowired
     private OtpService otpService;
 
@@ -82,10 +78,4 @@ public class UserController {
             return ResponseEntity.badRequest().body("Username or password is incorrect");
         }
     }
-//    @PostMapping("/verifyOtp")
-//    public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp) {
-//        User user = userService.verifyOtp(email, otp);
-//        String token = jwtUtil.generateToken(user.getEmail());
-//        return ResponseEntity.ok().body(token);
-//    }
 }
