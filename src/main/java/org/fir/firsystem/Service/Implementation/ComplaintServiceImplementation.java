@@ -2,10 +2,7 @@ package org.fir.firsystem.Service.Implementation;
 
 import org.fir.firsystem.GenAi.GroqController;
 import org.fir.firsystem.Mailing.EmailController;
-import org.fir.firsystem.Model.AppUser;
-import org.fir.firsystem.Model.Complaint;
-import org.fir.firsystem.Model.Incidence;
-import org.fir.firsystem.Model.Person;
+import org.fir.firsystem.Model.*;
 import org.fir.firsystem.Repository.ComplaintRepository;
 import org.fir.firsystem.Service.AppUserService;
 import org.fir.firsystem.Service.ComplaintService;
@@ -111,7 +108,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
         savedComplaint.setVictim(savedVictim);
         savedComplaint.setIncidence(saved_incidence);
         savedComplaint.setEvidenceLink(complaint.getEvidenceLink());
-        savedComplaint.setStatus(complaint.getStatus());
+        savedComplaint.setStatus(ComplaintStatus.PROCESSING);
         savedComplaint.setUser(user);
 
 
