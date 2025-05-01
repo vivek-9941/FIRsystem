@@ -49,9 +49,9 @@ public class UserController {
         System.out.println(isValid);
         if (isValid) {
             otpService.deleteOtp(email); // Optional: clean up manually
-//            String token = appUserService.getToken(email);
-//            return ResponseEntity.ok().body(token);
-            return ResponseEntity.ok().body("correct otp OTP");
+            String token = appUserService.getToken(email);
+            return ResponseEntity.ok().body(token);
+//            return ResponseEntity.ok().body("correct otp OTP");
 
         } else {
             return ResponseEntity.badRequest().body("Invalid or expired OTP");
@@ -62,7 +62,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
 
-       if( appUserService.checkuserpresent(user.getEmail())){
+       if( appUserService.checkuserpresent(user.getEmail() , user.getUsername()) ) {
            return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("User already exists");
        }
        else {
@@ -79,7 +79,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody AppUser user) {
+        System.out.println(user);
         String token =  appUserService.validateUser(user);
+        System.out.println(token);
         if(token != null) {
             return ResponseEntity.ok().body(token);
         }

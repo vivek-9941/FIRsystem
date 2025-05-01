@@ -68,9 +68,9 @@ public class AppUserServiceImplementation implements AppUserService {
     }
 
     @Override
-    public Boolean checkuserpresent(String email) {
+    public Boolean checkuserpresent(String email, String username) {
         AppUser user = findByEmail(email);
-        return user != null;
+        return (user != null || findByUsername(username) != null);
     }
 
 
