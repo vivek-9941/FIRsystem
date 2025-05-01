@@ -2,6 +2,7 @@ package org.fir.firsystem.Service.Implementation;
 
 import org.fir.firsystem.Model.AppUser;
 import org.fir.firsystem.Model.Complaint;
+import org.fir.firsystem.Model.Role;
 import org.fir.firsystem.Repository.AppUserRepository;
 import org.fir.firsystem.Repository.ComplaintRepository;
 import org.fir.firsystem.Service.AppUserService;
@@ -12,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AppUserServiceImplementation implements AppUserService {
@@ -31,6 +34,7 @@ public class AppUserServiceImplementation implements AppUserService {
     public AppUser save(AppUser appUser) {
         appUser.setPassword(passwordEncoder
                 .encode(appUser.getPassword()));
+        appUser.setRole(Role.USER);
         return appUserRepository.save(appUser);
     }
 
@@ -63,8 +67,14 @@ public class AppUserServiceImplementation implements AppUserService {
         return null;
     }
 
+    @Override
+    public Boolean checkuserpresent(String email) {
+        AppUser user = findByEmail(email);
+        return user != null;
+    }
 
-public String getToken(String email) {
+
+    public String getToken(String email) {
     AppUser user = findByEmail(email);
     return jwtService.generateToken(user.getUsername(), "USER");
 }

@@ -6,6 +6,7 @@ import org.fir.firsystem.Model.AppUser;
 import org.fir.firsystem.Service.AppUserService;
 import org.fir.firsystem.Service.OtpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +46,13 @@ public class UserController {
     @PostMapping("/verifyOtp")
     public ResponseEntity<?> verifyOtp(@RequestParam String email, @RequestParam String otp) {
         boolean isValid = otpService.verifyOtp(email, otp);
-
+        System.out.println(isValid);
         if (isValid) {
             otpService.deleteOtp(email); // Optional: clean up manually
-            String token = appUserService.getToken(email);
-            return ResponseEntity.ok().body(token);
+//            String token = appUserService.getToken(email);
+//            return ResponseEntity.ok().body(token);
+            return ResponseEntity.ok().body("correct otp OTP");
+
         } else {
             return ResponseEntity.badRequest().body("Invalid or expired OTP");
         }
@@ -58,13 +61,19 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
-       AppUser saveduser =  appUserService.save(user);
-        System.out.println(user);
-       if(saveduser != null) {
-         return   ResponseEntity.ok().body(saveduser);
+
+       if( appUserService.checkuserpresent(user.getEmail())){
+           return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("User already exists");
        }
-       else{
-           return ResponseEntity.badRequest().body("Something went wrong");
+       else {
+           System.out.println(user);
+           AppUser saveduser = appUserService.save(user);
+           System.out.println(user);
+           if (saveduser != null) {
+               return ResponseEntity.ok().body(saveduser);
+           } else {
+               return ResponseEntity.badRequest().body("Something went wrong");
+           }
        }
     }
 

@@ -11,20 +11,28 @@ import java.time.Duration;
 public class OtpService {
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
+
 
     private final String OTP_PREFIX = "OTP:";
 
     public void saveOtp(String email, String otp) {
         String key = OTP_PREFIX + email;
-        redisTemplate.opsForValue().set(key, otp);
-        redisTemplate.expire(key, Duration.ofMinutes(5)); // Auto-expire in 5 mins
+        redisTemplate.opsForValue().set(key, otp, Duration.ofMinutes(5));
+// Auto-expire in 5 mins
     }
 
     public boolean verifyOtp(String email, String otp) {
+        System.out.println(email + ":" + otp);
         String key = OTP_PREFIX + email;
         String storedOtp = (String) redisTemplate.opsForValue().get(key);
-        return otp.equals(storedOtp);
+        if (storedOtp == null){
+            return false;
+        }
+        System.out.println("OTP from user: [" + otp + "] length: " + otp.length());
+        System.out.println("Stored OTP   : [" + storedOtp + "] length: " + storedOtp.length());
+
+        return otp.trim().replaceAll("\\s+", "").equals(storedOtp.trim());
     }
 
     public void deleteOtp(String email) {
