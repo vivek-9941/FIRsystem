@@ -19,11 +19,13 @@ public class Incidence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private LocalDateTime time;
-    private LocalDate date;
+    private String time;
+    private String  date;
     @Embedded
     private Address address;
+    @Column(length = 2000)
     private String description;
+    @Column(nullable = true)
     private String crimetype;
 }
 

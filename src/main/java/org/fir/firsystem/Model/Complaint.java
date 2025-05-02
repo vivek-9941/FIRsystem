@@ -23,9 +23,10 @@ public class Complaint {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "victim_id")
     private Person victim ;
-
+    @Column(nullable = true)
     private String evidenceLink;
 
+    @Column(nullable = true)
     @Enumerated(EnumType.STRING)
     private ComplaintStatus status;
 
@@ -33,8 +34,9 @@ public class Complaint {
     @JoinColumn(name = "incidence_id")
     private Incidence incidence;
 
+
     @OneToOne
     @JsonBackReference
-    @JoinColumn(name = "user_id") // foreign key in Complaint table
+    @JoinColumn(name = "user_id", nullable = true)  // Add nullable = true here
     private AppUser user;
 }

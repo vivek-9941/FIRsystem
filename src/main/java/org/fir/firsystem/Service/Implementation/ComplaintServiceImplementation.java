@@ -8,6 +8,7 @@ import org.fir.firsystem.Service.AppUserService;
 import org.fir.firsystem.Service.ComplaintService;
 import org.fir.firsystem.Service.IncidenceService;
 import org.fir.firsystem.Service.PersonService;
+import org.fir.firsystem.utility.Utility_class;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ import java.util.List;
 
 @Service
 public class ComplaintServiceImplementation implements ComplaintService {
+
+    @Autowired
+    private Utility_class util;
 
     @Autowired
     private GroqController groqController;
@@ -99,8 +103,8 @@ public class ComplaintServiceImplementation implements ComplaintService {
         Incidence saved_incidence = incidenceService.save(incidence1);
         //user will onyl send the username . based on which whole user object will be
         //taken out from db and attached with complaint.
-        AppUser user = appUserService.findByUsername(complaint.getUser().getUsername());
-
+        AppUser user = appUserService.findByUsername(Utility_class.getCurrentUsername());
+        System.out.println(user);
         Complaint savedComplaint = new Complaint();
 
         //saving the complaint
