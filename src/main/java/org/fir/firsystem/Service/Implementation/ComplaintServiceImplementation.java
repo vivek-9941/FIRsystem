@@ -121,14 +121,19 @@ public class ComplaintServiceImplementation implements ComplaintService {
         emailController.sendEmail(
                 user.getEmail(),
                 "FIR Complaint Registered Successfully – FIR ID: " + complaint_from_DB.getId(),
-                "Dear " + user.getFirstName() + " " + user.getLastName() + ",\n\n" +
-                        "We acknowledge receipt of your complaint. Your FIR has been successfully registered in our system.\n\n" +
-                        "Your FIR Complaint ID is: " + complaint_from_DB.getId() + "\n\n" +
-                        "Please keep this ID for future reference regarding your case. Authorities will review your complaint and take appropriate action as per legal procedures.\n\n" +
-                        "If you have any further queries or additional information related to this complaint, please feel free to reply to this email or contact your nearest police station.\n\n" +
-                        "Thank you for bringing this to our attention.\n\n" +
-                        "Regards,\n" +
-                        "Online FIR System\n"
+                "<html>" +
+                        "<body>" +
+                        "<p>Dear " + user.getFirstName() + " " + user.getLastName() + ",</p>" +
+                        "<p>We acknowledge receipt of your complaint. Your FIR has been successfully registered in our system.</p>" +
+                        "<p><strong>Your FIR Complaint ID is:</strong> " + complaint_from_DB.getId() + "</p>" +
+                        "<p>Please keep this ID for future reference regarding your case. Authorities will review your complaint and take appropriate action as per legal procedures.</p>" +
+                        "<p>If you have any further queries or additional information related to this complaint, please feel free to reply to this email or contact your nearest police station.</p>" +
+                        "<br>" +
+                        "<p>Thank you for bringing this to our attention.</p>" +
+                        "<p>Regards,<br>Online FIR System</p>" +
+                        "</body>" +
+                        "</html>"
+
         );
 
         return complaint_from_DB;

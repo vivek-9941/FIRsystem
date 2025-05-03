@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/complaint")
@@ -37,7 +40,7 @@ public class ComplaintController {
     @GetMapping("/fetch")
     public ResponseEntity<?> fetchComplaint() {
         String username = util.getCurrentUsername(); // Call method on the injected instance
-        Complaint complaints = userService.findcomplaintByUser(username);
+        List<Complaint> complaints = userService.findcomplaintByUser(username);
         return new ResponseEntity<>(complaints, HttpStatus.OK);
     }
 

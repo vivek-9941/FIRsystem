@@ -20,7 +20,7 @@ public class GroqController {
     private String model;
     @PostMapping("/api/groq")
     public String callApi(@RequestBody String content) {
-        String finalcontent =  "assume you are a chatbot for a online FIR system give answers accordingly for the query:";
+        String finalcontent =  "You are a virtual assistant for a police complaint filing system. Your purpose is to give users give information and solve their doubts not  asking a question just give the answer to them .  ";
         content = content  + finalcontent ;
         return groqApiService.callGroqApi(apiKey, model, content);
     }

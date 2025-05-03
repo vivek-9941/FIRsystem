@@ -35,7 +35,7 @@ public class Complaint {
     private Incidence incidence;
 
 
-    @OneToOne
+    @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "user_id", nullable = true)  // Add nullable = true here
     private AppUser user;

@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class AppUserServiceImplementation implements AppUserService {
@@ -43,7 +43,7 @@ public class AppUserServiceImplementation implements AppUserService {
         return appUserRepository.findByUsername(username);
     }
 
-    public Complaint findcomplaintByUser(String username) {
+    public List<Complaint> findcomplaintByUser(String username) {
         AppUser user = appUserRepository.findByUsername(username);
         return complaintRepository.findByUser(user);
     }

@@ -5,9 +5,11 @@ import org.fir.firsystem.Model.Complaint;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ComplaintRepository extends JpaRepository<Complaint,Integer> {
-    Complaint findByUser(AppUser user);
+    List<Complaint> findByUser(AppUser user);
 
 
 }
