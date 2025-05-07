@@ -4,12 +4,26 @@ LABEL authors="Shrihari"
 
 # Install necessary packages
 RUN apt-get update && \
-    apt-get install -y redis-server && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    redis-server \
+    mysql-server \
+    openjdk-17-jdk \
+    curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Expose default Redis port
-EXPOSE 6379
+# Set environment variables
+ENV REDIS_PORT=6379 \
+    MYSQL_PORT=3307 \
+    SPRING_PORT=8080 \
+    MYSQL_ROOT_PASSWORD=8999617581@Sh
 
-# Start Redis server in the foreground
-ENTRYPOINT ["redis-server", "--protected-mode", "no"]
+# Expose ports
+EXPOSE ${REDIS_PORT} ${MYSQL_PORT} ${SPRING_PORT}
+
+# Copy application and entrypoint
+COPY target/FIRsystem-0.0.1-SNAPSHOT.jar /app/FIRsystem.jar
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
