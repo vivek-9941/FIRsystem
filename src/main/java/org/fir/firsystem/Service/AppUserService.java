@@ -12,5 +12,6 @@ public interface AppUserService {
     public List<Complaint> findcomplaintByUser(String username);
     public AppUser findByEmail(String email);
     public String validateUser(AppUser user);
+    public String validatePolice(AppUser user);
      Boolean checkuserpresent(String email,String username);
 }
