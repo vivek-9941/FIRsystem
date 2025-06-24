@@ -1,5 +1,6 @@
 package org.fir.firsystem.Service.Implementation;
 
+import org.fir.firsystem.DTO.ComplaintPageResponse;
 import org.fir.firsystem.GenAi.GroqController;
 import org.fir.firsystem.Mailing.EmailController;
 import org.fir.firsystem.Model.*;
@@ -153,9 +154,10 @@ public class ComplaintServiceImplementation implements ComplaintService {
     }
 
     @Override
-    public List<Complaint> getAllComplaints(Integer page, Integer size) {
+    public ComplaintPageResponse getAllComplaints(Integer page, Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Complaint> complaintPage = complaintRepository.findAll(pageable);
-        return complaintPage.getContent();
+        return new ComplaintPageResponse(complaintPage.getContent(), complaintPage.getTotalElements());
     }
+
 }
