@@ -29,6 +29,8 @@ public class AppUser  {
     @Column( nullable = false)
     private String password;
     @Column( nullable = true)
+    private boolean isVerified;
+    @Column( nullable = true)
     private String aadharNumber;
     @Column( nullable = true)
     private String email;
