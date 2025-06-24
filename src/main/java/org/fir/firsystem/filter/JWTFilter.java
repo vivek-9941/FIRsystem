@@ -38,8 +38,7 @@ public class JWTFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
-        // Skip filter for login/register endpoints
-        if (request.getServletPath().contains("/api/auth")) {
+        if (request.getServletPath().contains("/api/auth") || request.getServletPath().contains("/user/api/groq")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -50,23 +49,35 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-        username = jwtService.extractUserName(jwt);
+        try {
+            username = jwtService.extractUserName(jwt);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.validateToken(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (jwtService.validateToken(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (io.jsonwebtoken.ExpiredJwtException ex) {
+            // Token expired — respond with 401 and custom message if desired
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token expired. Please login again.");
+            return; // Don't continue filter chain
+        } catch (Exception ex) {
+            // Optional: handle other token parsing exceptions
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Invalid token.");
+            return;
         }
 
         filterChain.doFilter(request, response);
     }
+
 }
