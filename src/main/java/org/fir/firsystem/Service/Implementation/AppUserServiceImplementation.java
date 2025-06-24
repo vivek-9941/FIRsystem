@@ -55,14 +55,39 @@ public class AppUserServiceImplementation implements AppUserService {
 
     @Override
     public String validateUser(AppUser u) {
+        System.out.println(1);
+        try{
+
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         u.getUsername(), u.getPassword()
                 )
         );
+        System.out.println(2);
         if (authenticate.isAuthenticated()) {
+            System.out.println(3);
             //after login send the token
             return jwtService.generateToken(u.getUsername(), "USER");
+        }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public String validatePolice(AppUser u) {
+
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        u.getUsername(), u.getPassword()
+                )
+        );
+
+        if (authenticate.isAuthenticated()) {
+            //after login send the token
+            return jwtService.generateToken(u.getUsername(), "POLICE");
         }
         return null;
     }
