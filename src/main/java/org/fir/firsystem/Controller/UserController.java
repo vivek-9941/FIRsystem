@@ -69,11 +69,13 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody AppUser user) {
-
+        System.out.println(user);
+        System.out.println(0);
         if (appUserService.checkuserpresent(user.getEmail(), user.getUsername())) {
+            System.out.println(1);
             return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("User already exists");
         } else {
-            System.out.println(user);
+            System.out.println(2 );
             AppUser saveduser = appUserService.save(user);
             System.out.println(user);
             if (saveduser != null) {
@@ -114,6 +116,23 @@ public class UserController {
             return ResponseEntity.ok().body(token);
         } else {
             return ResponseEntity.badRequest().body("Username or password is incorrect");
+        }
+    }
+
+    @PostMapping("/register/police")
+    public ResponseEntity<?> registerPolice(@RequestBody AppUser user) {
+
+        if (appUserService.checkuserpresent(user.getEmail(), user.getUsername())) {
+            return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("User already exists");
+        } else {
+            System.out.println(user);
+            AppUser saveduser = appUserService.savepolice(user);
+            System.out.println(user);
+            if (saveduser != null) {
+                return ResponseEntity.ok().body(saveduser);
+            } else {
+                return ResponseEntity.badRequest().body("Something went wrong");
+            }
         }
     }
 }

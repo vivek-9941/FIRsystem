@@ -39,6 +39,13 @@ public class AppUserServiceImplementation implements AppUserService {
     }
 
     @Override
+    public AppUser savepolice(AppUser appUser) {
+        appUser.setPassword(passwordEncoder
+                .encode(appUser.getPassword()));
+        appUser.setRole(Role.POLICE);
+        return appUserRepository.save(appUser);    }
+
+    @Override
     public AppUser findByUsername(String username) {
         return appUserRepository.findByUsername(username);
     }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface AppUserService {
     AppUser save(AppUser appUser);
+    AppUser savepolice(AppUser appUser);
     AppUser findByUsername(String username);
     public String getToken(String email);
     public List<Complaint> findcomplaintByUser(String username);
