@@ -18,8 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 
-
-import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ComplaintServiceImplementation implements ComplaintService {
@@ -142,16 +141,21 @@ public class ComplaintServiceImplementation implements ComplaintService {
     }
 
     @Override
-    public Complaint updateComplaint(Complaint complaint) {
-        Complaint toSaved = new Complaint();
-        toSaved.setId(complaint.getId());
-        toSaved.setStatus(complaint.getStatus());
-        toSaved.setEvidenceLink(complaint.getEvidenceLink());
-        toSaved.setIncidence(incidenceService.save(complaint.getIncidence()));
-        toSaved.setAccused(personService.save(complaint.getAccused()));
-        toSaved.setVictim(personService.save(complaint.getVictim()));
-        toSaved.setUser(appUserService.save(complaint.getUser()));
-        return complaintRepository.save(toSaved);
+    public Complaint updateComplaint(String verdict , int id) {
+//        Complaint toSaved = new Complaint();
+//        toSaved.setId(complaint.getId());
+//        toSaved.setStatus(complaint.getStatus());
+//        toSaved.setEvidenceLink(complaint.getEvidenceLink());
+//        toSaved.setIncidence(incidenceService.save(complaint.getIncidence()));
+//        toSaved.setAccused(personService.save(complaint.getAccused()));
+//        toSaved.setVictim(personService.save(complaint.getVictim()));
+//        toSaved.setUser(appUserService.save(complaint.getUser()));
+      Complaint  complaint = complaintRepository.findById(id).orElse(null);
+      if(complaint != null) {
+          complaint.setStatus(Objects.equals(verdict, "SUCCEEDED") ? ComplaintStatus.SUCCEEDED: ComplaintStatus.REJECTED);
+          return complaintRepository.save(complaint);
+      }
+        return null;
     }
 
     @Override
