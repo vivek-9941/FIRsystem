@@ -30,6 +30,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./config/application.properties:/config/application.properties
+      - ./src/main/resources/application.properties:/app/resources/application.properties
     environment:
       - SPRING_PROFILES_ACTIVE=default
