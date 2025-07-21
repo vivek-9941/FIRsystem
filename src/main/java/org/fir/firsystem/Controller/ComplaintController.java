@@ -51,7 +51,7 @@ public class ComplaintController {
         System.out.println("Authentication: " + auth);
         System.out.println("Principal: " + auth.getPrincipal());
         System.out.println("Authorities: " + auth.getAuthorities());
-
+        service.toString();
         String username = Utility_class.getCurrentUsername();
         AppUser user = appUserService.findByUsername(username);
         return ResponseEntity.ok(user);

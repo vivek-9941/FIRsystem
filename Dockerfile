@@ -1,29 +1,13 @@
-FROM ubuntu:latest
+FROM eclipse-temurin:17-jdk-alpine
 
-LABEL authors="Shrihari"
+# Create app directory
+WORKDIR /app
 
-# Install necessary packages
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    redis-server \
-    mysql-server \
-    openjdk-17-jdk \
-    curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Copy jar file
+COPY target/FIRsystem-0.0.1-SNAPSHOT.jar app.jar
 
-# Set environment variables
-ENV REDIS_PORT=6379 \
-    MYSQL_PORT=3307 \
-    SPRING_PORT=8080 \
-    MYSQL_ROOT_PASSWORD=8999617581@Sh
+# Copy the config mount location path (will be overridden in volume at runtime)
+VOLUME /config
 
-# Expose ports
-EXPOSE ${REDIS_PORT} ${MYSQL_PORT} ${SPRING_PORT}
-
-# Copy application and entrypoint
-COPY target/FIRsystem-0.0.1-SNAPSHOT.jar /app/FIRsystem.jar
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+# Entry point with external config
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.config.location=file:/config/application.properties"]

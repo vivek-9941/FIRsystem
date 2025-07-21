@@ -2,6 +2,7 @@ package org.fir.firsystem.Service.Implementation;
 
 import org.fir.firsystem.DTO.ComplaintPageResponse;
 import org.fir.firsystem.GenAi.GroqController;
+import org.fir.firsystem.GenAi.PromptDto;
 import org.fir.firsystem.Mailing.EmailController;
 import org.fir.firsystem.Model.*;
 import org.fir.firsystem.Repository.ComplaintRepository;
@@ -51,7 +52,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
         Person savedVictim = personService.save(complaint.getVictim());
         //description
         String incidence = complaint.getIncidence().getDescription();
-        String summary = groqController.callApi("Convert the given incident into a concise, grammatically correct, and legally appropriate description in formal language, suitable for the 'Incident Description' section of an FIR complaint. Respond with only the final description and nothing else." + " " + incidence);
+        String summary = groqController.callApi(new PromptDto("Convert the given incident into a concise, grammatically correct, and legally appropriate description in formal language, suitable for the 'Incident Description' section of an FIR complaint. Respond with only the final description and nothing else." + " " + incidence).toString());
         Incidence incidence1 = complaint.getIncidence();
         incidence1.setDescription(summary);
         //crime category;
@@ -98,7 +99,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
                 "1. Identify which categories best fit the provided summary.\n" +
                 "2. only Return the identified categories as an array and nothing.\n" +
                 "3. If no categories match, return [\"Not Identified\"].";
-        String crimes = groqController.callApi(prompt);
+        String crimes = groqController.callApi(new PromptDto(prompt).toString());
         incidence1.setCrimetype(crimes);
         System.out.println(incidence1);
         Incidence saved_incidence = incidenceService.save(incidence1);
