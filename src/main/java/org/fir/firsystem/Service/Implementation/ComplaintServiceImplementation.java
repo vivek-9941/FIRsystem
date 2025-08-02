@@ -126,7 +126,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
                         "<body>" +
                         "<p>Dear " + user.getFirstName() + " " + user.getLastName() + ",</p>" +
                         "<p>We acknowledge receipt of your complaint. Your FIR has been successfully registered in our system.</p>" +
-                        "<p><strong>Your FIR Complaint ID is:</strong> " + complaint_from_DB.getId() + "</p>" +
+                        "<p><strong>Your FIR Complaint ID is:</strong> " + "<b>"+complaint_from_DB.getId()+"<b>" + "</p>" +
                         "<p>Please keep this ID for future reference regarding your case. Authorities will review your complaint and take appropriate action as per legal procedures.</p>" +
                         "<p>If you have any further queries or additional information related to this complaint, please feel free to reply to this email or contact your nearest police station.</p>" +
                         "<br>" +

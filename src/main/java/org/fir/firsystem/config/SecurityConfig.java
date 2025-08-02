@@ -33,7 +33,7 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
+    @Autowired
     private final JWTFilter jwtAuthFilter;
 
     @Bean
@@ -46,12 +46,12 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .anonymous(anonymous -> anonymous
-                        .principal("anonymousUser")
-                        .authorities("ROLE_ANONYMOUS")
                 );
+
+        // Add decryption filter FIRST (before JWT)
+
+        // Then JWT authentication filter
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
