@@ -105,13 +105,9 @@ public class AppUserServiceImplementation implements AppUserService {
         return (user != null || findByUsername(username) != null);
     }
 
-
     public String getToken(String email) {
-    AppUser user = findByEmail(email);
-    return jwtService.generateToken(user.getUsername(), "USER");
-}
-
-// here after the opt verification the jwt will be sent
-//also if user done manual login using password here send the token back
+       AppUser user = findByEmail(email);
+        return jwtService.generateToken(user.getUsername(), "USER");
+    }
 
 }
