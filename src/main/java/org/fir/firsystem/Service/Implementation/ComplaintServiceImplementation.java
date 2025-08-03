@@ -1,7 +1,7 @@
 package org.fir.firsystem.Service.Implementation;
 
 import org.fir.firsystem.DTO.ComplaintPageResponse;
-import org.fir.firsystem.GenAi.GroqController;
+import org.fir.firsystem.GenAi.GroqApiService;
 import org.fir.firsystem.GenAi.PromptDto;
 import org.fir.firsystem.Mailing.EmailController;
 import org.fir.firsystem.Model.*;
@@ -10,6 +10,7 @@ import org.fir.firsystem.Service.AppUserService;
 import org.fir.firsystem.Service.ComplaintService;
 import org.fir.firsystem.Service.IncidenceService;
 import org.fir.firsystem.Service.PersonService;
+import org.fir.firsystem.utility.AESUtil;
 import org.fir.firsystem.utility.Utility_class;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
     private Utility_class util;
 
     @Autowired
-    private GroqController groqController;
+    private GroqApiService groqservice;
 
     @Autowired
     private EmailController emailController;
@@ -44,18 +45,20 @@ public class ComplaintServiceImplementation implements ComplaintService {
     @Autowired
     private ComplaintRepository complaintRepository;
 
+    @Autowired
+    private AESUtil AESUtil;
     @Override
-    public Complaint saveComplaint(Complaint complaint) {
+    public Complaint saveComplaint(Complaint complaint) throws Exception {
         System.out.println(complaint);
         Person savedAccused = personService.save(complaint.getAccused());
         Person savedVictim = personService.save(complaint.getVictim());
         //description
-        String incidence = complaint.getIncidence().getDescription();
-        String summary = groqController.callApi(new PromptDto("Convert the given incident into a concise, grammatically correct, and legally appropriate description in formal language, suitable for the 'Incident Description' section of an FIR complaint. Respond with only the final description and nothing else." + " " + incidence).toString());
+        String incidence = AESUtil.decryptPlainText(complaint.getIncidence().getDescription());//decrypt here
+        String summary = AESUtil.encryptPlainText(groqservice.callGroqApi(new PromptDto("Convert the given incident into a concise, grammatically correct, and legally appropriate description in formal language, suitable for the 'Incident Description' section of an FIR complaint. Respond with only the final description and nothing else." + " " + incidence).toString()));
         Incidence incidence1 = complaint.getIncidence();
         incidence1.setDescription(summary);
         //crime category;
-        String prompt = summary + "\n\n" +
+        String prompt = AESUtil.decryptPlainText(summary) + "\n\n" +
                 "Given the following list of crime categories:\n" +
                 "[\n" +
                 "  \"Cognizable Offenses\",\n" +
@@ -98,7 +101,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
                 "1. Identify which categories best fit the provided summary.\n" +
                 "2. only Return the identified categories as an array and nothing.\n" +
                 "3. If no categories match, return [\"Not Identified\"].";
-        String crimes = groqController.callApi(new PromptDto(prompt).toString());
+        String crimes = AESUtil.encryptPlainText(groqservice.callGroqApi(new PromptDto(prompt).toString()));
         incidence1.setCrimetype(crimes);
         System.out.println(incidence1);
         Incidence saved_incidence = incidenceService.save(incidence1);
@@ -124,7 +127,7 @@ public class ComplaintServiceImplementation implements ComplaintService {
                 "FIR Complaint Registered Successfully – FIR ID: " + complaint_from_DB.getId(),
                 "<html>" +
                         "<body>" +
-                        "<p>Dear " + user.getFirstName() + " " + user.getLastName() + ",</p>" +
+                        "<p>Dear " + AESUtil.decryptPlainText(user.getFirstName()) + " " + AESUtil.decryptPlainText(user.getLastName()) + ",</p>" +
                         "<p>We acknowledge receipt of your complaint. Your FIR has been successfully registered in our system.</p>" +
                         "<p><strong>Your FIR Complaint ID is:</strong> " + "<b>"+complaint_from_DB.getId()+"<b>" + "</p>" +
                         "<p>Please keep this ID for future reference regarding your case. Authorities will review your complaint and take appropriate action as per legal procedures.</p>" +

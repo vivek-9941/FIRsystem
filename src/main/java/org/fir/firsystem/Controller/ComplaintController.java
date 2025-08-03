@@ -28,7 +28,7 @@ public class ComplaintController {
     private Utility_class util; // Properly injected utility class
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveComplaint(@RequestBody Complaint complaint) {
+    public ResponseEntity<?> saveComplaint(@RequestBody Complaint complaint) throws Exception {
         System.out.println(complaint);
         Complaint savedComplaint = service.saveComplaint(complaint);
         if(savedComplaint != null) {

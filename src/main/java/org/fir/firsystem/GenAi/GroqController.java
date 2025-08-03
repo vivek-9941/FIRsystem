@@ -13,13 +13,9 @@ public class GroqController {
     @Autowired
     private GroqApiService groqApiService;
 
-    @Value("${groq.api.key}")
-    private String apiKey;
-
-    @Value("${groq.api.model}")
-    private String model;
     @PostMapping("/api/groq")
     public String callApi(@RequestBody String content) {
+
         String finalcontent =  "You are an AI assistant for the e-FIR Complaint System, an online platform for registering and tracking police complaints.\n" +
                 "Your responsibilities:\n" +
                 "\n" +
@@ -63,7 +59,7 @@ public class GroqController {
                 +"the user's query is :- "+content;
 
         content = content  + finalcontent ;
-        return groqApiService.callGroqApi(apiKey, model, content);
+        return groqApiService.callGroqApi(content);
     }
 }
 

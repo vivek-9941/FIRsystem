@@ -23,6 +23,7 @@ public class Complaint {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "victim_id")
     private Person victim ;
+
     @Column(nullable = true)
     private String evidenceLink;
 

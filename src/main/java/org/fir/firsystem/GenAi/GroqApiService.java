@@ -2,6 +2,7 @@ package org.fir.firsystem.GenAi;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +19,12 @@ public class GroqApiService {
         this.restTemplate = new RestTemplate();
     }
 
-    public String callGroqApi(String apiKey, String model, String content) {
+    @Value("${groq.api.key}")
+    private String apiKey;
+
+    @Value("${groq.api.model}")
+    private String model;
+    public String callGroqApi( String content) {
         try {
             // Construct JSON payload using a Map
 

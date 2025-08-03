@@ -16,6 +16,7 @@ public class EmailController {
             emailSenderService.sendEmail(toEmail, body, subject);
             return true;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
